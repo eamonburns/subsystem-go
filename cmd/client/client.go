@@ -1,10 +1,11 @@
 package main
 
 import (
-	// "bufio"
+	"bufio"
 	"log"
 	"net"
 	"os"
+	"strings"
 
 	"github.com/eamonburns/subsystem-go/internal/message"
 )
@@ -39,4 +40,22 @@ func main() {
 	message.Send(conn, message.EchoMsg{
 		Message: "Echo 2",
 	})
+
+	input := bufio.NewScanner(os.Stdin)
+	for input.Scan() {
+		line := input.Text()
+		var m message.Msg
+		if strings.HasPrefix(line, "e ") {
+			m = message.ErrorMsg{Err: line[2:]}
+		} else if strings.HasPrefix(line, "m ") {
+			m = message.EchoMsg{Message: line[2:]}
+		} else {
+			// TODO: handle it better
+			panic("Unknown type")
+		}
+
+		if err := message.Send(conn, m); err != nil {
+			panic(err)
+		}
+	}
 }

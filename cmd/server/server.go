@@ -38,11 +38,13 @@ func main() {
 		panic(err)
 	}
 	defer listener.Close()
+
 	conn, err := listener.Accept()
 	if err != nil {
 		panic(err)
 	}
 	defer conn.Close()
+	log.Printf("Connection from %s", conn.RemoteAddr())
 
 	scanner := bufio.NewScanner(conn)
 	scanner.Split(message.Split)

@@ -12,6 +12,7 @@ type MsgType byte
 const FormatVersion = 0
 
 const (
+	// TODO: Should I make the zero value be UnknownMsgType or something?
 	ErrorMsgType MsgType = iota
 	EchoMsgType
 )
